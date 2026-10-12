@@ -1,1 +1,39 @@
-<p>Home stub</p>
+<main class="home">
+  <header class="home__header">
+    <a routerLink="/profile" class="home__avatar-link" aria-label="View profile">
+      <div class="home__avatar-placeholder">CF</div>
+    </a>
+    <div class="home__intro">
+      <h1>Christian Farrell</h1>
+      <p class="home__tagline">Software Engineer</p>
+    </div>
+  </header>
+
+  <section class="home__projects">
+    <h2>Work</h2>
+    <ul class="project-list">
+      @for (project of projects; track project.title) {
+        <li class="project-card">
+          <div class="project-card__header">
+            <span class="project-card__title">
+              @if (project.url) {
+                <a [href]="project.url" target="_blank" rel="noopener noreferrer">
+                  {{ project.title }}
+                </a>
+              } @else {
+                {{ project.title }}
+              }
+            </span>
+            <span class="project-card__year">{{ project.year }}</span>
+          </div>
+          <p class="project-card__description">{{ project.description }}</p>
+          <ul class="project-card__tags">
+            @for (tag of project.tags; track tag) {
+              <li class="project-card__tag">{{ tag }}</li>
+            }
+          </ul>
+        </li>
+      }
+    </ul>
+  </section>
+</main>
