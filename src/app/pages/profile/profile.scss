@@ -1,1 +1,57 @@
-// profile styles
+.profile {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+
+  &__nav {
+    margin-bottom: 3rem;
+  }
+
+  &__back {
+    font-size: 0.9rem;
+    color: #666;
+    text-decoration: none;
+
+    &:hover {
+      color: #111;
+    }
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+  }
+
+  &__avatar-placeholder {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: #e0e0d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #444;
+  }
+
+  &__header h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+
+  &__tagline {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+  }
+
+  &__bio {
+    color: #555;
+    line-height: 1.7;
+  }
+}
