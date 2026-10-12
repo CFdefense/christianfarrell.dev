@@ -6,21 +6,6 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <script>
-      // Companion to 404.html — decodes the redirect path back to the real URL
-      (function (l) {
-        var m = l.search.match(/^\?p=([^&]*)(?:&q=(.*))?$/);
-        if (m) {
-          var path = m[1].replace(/~and~/g, '&');
-          var query = m[2] ? '?' + m[2].replace(/~and~/g, '&') : '';
-          window.history.replaceState(
-            null,
-            null,
-            l.pathname.slice(0, -1) + path + query + l.hash
-          );
-        }
-      })(window.location);
-    </script>
   </head>
   <body>
     <app-root></app-root>
