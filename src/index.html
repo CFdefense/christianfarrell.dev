@@ -9,20 +9,14 @@
     <script>
       // Companion to 404.html — decodes the redirect path back to the real URL
       (function (l) {
-        if (l.search[1] === '/') {
-          var decoded = l.search
-            .slice(1)
-            .split('&')
-            .map(function (s) {
-              return s.replace(/~and~/g, '&');
-            });
+        var m = l.search.match(/^\?p=([^&]*)(?:&q=(.*))?$/);
+        if (m) {
+          var path = m[1].replace(/~and~/g, '&');
+          var query = m[2] ? '?' + m[2].replace(/~and~/g, '&') : '';
           window.history.replaceState(
             null,
             null,
-            l.pathname.slice(0, -1) +
-              decoded[0] +
-              (decoded[1] ? '&' + decoded[1].slice(1) : '') +
-              l.hash
+            l.pathname.slice(0, -1) + path + query + l.hash
           );
         }
       })(window.location);
