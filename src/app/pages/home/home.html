@@ -11,11 +11,11 @@
 
   <section class="home__projects">
     <h2>Work</h2>
-    <ul class="project-list">
+    <ul class="home__project-list">
       @for (project of projects; track project.title) {
-        <li class="project-card">
-          <div class="project-card__header">
-            <span class="project-card__title">
+        <li class="home__project-card">
+          <div class="home__project-card-header">
+            <span class="home__project-card-title">
               @if (project.url) {
                 <a [href]="project.url" target="_blank" rel="noopener noreferrer">
                   {{ project.title }}
@@ -24,12 +24,12 @@
                 {{ project.title }}
               }
             </span>
-            <span class="project-card__year">{{ project.year }}</span>
+            <span class="home__project-card-year">{{ project.year }}</span>
           </div>
-          <p class="project-card__description">{{ project.description }}</p>
-          <ul class="project-card__tags">
+          <p class="home__project-card-description">{{ project.description }}</p>
+          <ul class="home__project-card-tags">
             @for (tag of project.tags; track tag) {
-              <li class="project-card__tag">{{ tag }}</li>
+              <li class="home__project-card-tag">{{ tag }}</li>
             }
           </ul>
         </li>

@@ -11,6 +11,7 @@
   }
 
   &__avatar-link {
+    display: block;
     text-decoration: none;
   }
 
@@ -25,7 +26,6 @@
     font-size: 1.25rem;
     font-weight: 600;
     color: #444;
-    cursor: pointer;
 
     &:hover {
       background: #d0d0c8;
@@ -51,64 +51,64 @@
     color: #999;
     margin-bottom: 1.5rem;
   }
-}
 
-.project-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.project-card {
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 0.4rem;
-  }
-
-  &__title {
-    font-weight: 500;
-
-    a {
-      color: inherit;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  &__year {
-    font-size: 0.85rem;
-    color: #999;
-  }
-
-  &__description {
-    margin: 0 0 0.75rem;
-    color: #555;
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
-
-  &__tags {
+  &__project-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+    flex-direction: column;
+    gap: 2rem;
   }
 
-  &__tag {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.6rem;
-    background: #eeede8;
-    border-radius: 999px;
-    color: #555;
+  &__project-card {
+    &-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.4rem;
+    }
+
+    &-title {
+      font-weight: 500;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    &-year {
+      font-size: 0.85rem;
+      color: #999;
+    }
+
+    &-description {
+      margin: 0 0 0.75rem;
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    &-tags {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    &-tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      background: #eeede8;
+      border-radius: 999px;
+      color: #555;
+    }
   }
 }
