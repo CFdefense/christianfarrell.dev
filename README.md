@@ -1,6 +1,18 @@
 # christianfarrell.dev
 New and Improved Portfolio Website
 
+## Development
+
+```bash
+npm install   # install dependencies
+npm start     # dev server at http://localhost:4200
+npm test      # run tests
+npm run build # production build
+npm run deploy # build + push to gh-pages branch
+```
+
+**Adding a project:** open `src/app/data/projects.data.ts` and append an entry to `PROJECTS`. No other files need to change.
+
 # Inspiration
 
 https://www.attiq.design/
