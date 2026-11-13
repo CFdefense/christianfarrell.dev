@@ -8,8 +8,7 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
-    loadComponent: () =>
-      import('./pages/profile/profile').then((m) => m.ProfileComponent),
+    redirectTo: '',
   },
   {
     path: '**',
