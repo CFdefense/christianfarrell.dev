@@ -16,7 +16,6 @@ npm run deploy # build + push to gh-pages branch
 # Inspiration
 
 https://www.attiq.design/
-https://brittanychiang.com
 
 - Projects are displayed nicely
 - Header is simple
