@@ -6,4 +6,6 @@ export interface Experience {
   shortDescription: string;
   fullDescription: string;
   tags: string[];
+  image?: string;
+  initials?: string;
 }

@@ -9,6 +9,8 @@ export const EXPERIENCES: Experience[] = [
     shortDescription: 'Lead engineer building responsive frontend platforms and design systems.',
     fullDescription: '<ul><li>Architected core design token system reducing layout code overhead by 30%.</li><li>Supervised a team of 4 frontend engineers on a critical client delivery.</li><li>Implemented native performance enhancements, improving PageSpeed score to 98.</li></ul>',
     tags: ['Angular', 'TypeScript', 'SCSS', 'WASM'],
+    image: 'assets/explorations/innovate-tech.jpg',
+    initials: 'IT',
   },
   {
     role: 'Software Engineer',
@@ -18,5 +20,7 @@ export const EXPERIENCES: Experience[] = [
     shortDescription: 'Designed high-fidelity interactive interfaces and developer tools.',
     fullDescription: '<ul><li>Built custom canvas dashboard for database schema visualizer.</li><li>Developed and maintained core UI toolkit using web components.</li><li>Decreased application bundle sizes by 15% through lazy-loading tree shaking.</li></ul>',
     tags: ['TypeScript', 'Node.js', 'RxJS', 'CSS Grid'],
+    image: 'assets/explorations/stellarweb.jpg',
+    initials: 'SW',
   }
 ];

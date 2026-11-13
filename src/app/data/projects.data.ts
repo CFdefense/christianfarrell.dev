@@ -8,6 +8,7 @@ export const PROJECTS: Project[] = [
     tags: ['Angular', 'TypeScript', 'SCSS'],
     url: 'https://github.com/CFdefense/christianfarrell.dev',
     year: 2025,
+    image: 'assets/work/portfolio.jpg',
   },
   {
     title: 'Example Project',
@@ -15,5 +16,6 @@ export const PROJECTS: Project[] = [
     longDescription: 'A data-driven web application template utilizing TypeScript and structured models to demonstrate modular component layouts.',
     tags: ['TypeScript'],
     year: 2024,
+    image: 'assets/work/example.jpg',
   },
 ];
