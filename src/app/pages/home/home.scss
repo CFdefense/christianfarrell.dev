@@ -29,7 +29,7 @@ $card-dark: #121214;
 
 .content-container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1400px;
 }
 
 .profile-header-centered {
@@ -91,25 +91,36 @@ $card-dark: #121214;
 }
 
 .badge {
-  padding: 0.35rem 0.85rem;
+  padding: 0.5rem 1.15rem;
   border-radius: 9999px;
   font-size: 0.85rem;
   color: $dark;
-  transition: 0.2s;
+  box-shadow: 0 4px 12px rgba(24, 24, 27, 0.04), 0 1px 3px rgba(24, 24, 27, 0.02);
+  transition: all 0.2s;
 
   &:hover {
     background-color: $dark;
     color: #faf9f6;
     border-color: $dark;
     transform: translateY(-1px);
+    box-shadow: 0 10px 20px -5px rgba(24, 24, 27, 0.08), 0 4px 6px -2px rgba(24, 24, 27, 0.04);
   }
 }
 
 .summary-paragraph {
   font-family: 'Lora', Georgia, serif;
-  max-width: 540px;
-  margin: 1.5rem auto 0;
-  line-height: 1.7;
+  font-size: 2.25rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+  max-width: 860px;
+  margin: 2rem auto 0;
+  
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    padding: 0 1rem;
+  }
 }
 
 .section-block-centered {
@@ -130,6 +141,8 @@ $card-dark: #121214;
   grid-template-columns: 1fr;
   gap: 1.5rem;
   width: 100%;
+  max-width: 1020px;
+  margin: 0 auto;
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
@@ -143,10 +156,12 @@ $card-dark: #121214;
   overflow: hidden;
   cursor: pointer;
   text-align: left;
-  transition: transform 0.2s;
+  box-shadow: 0 8px 24px -6px rgba(24, 24, 27, 0.04), 0 2px 6px -1px rgba(24, 24, 27, 0.02);
+  transition: all 0.2s;
 
   &:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px -8px rgba(24, 24, 27, 0.08), 0 6px 16px -2px rgba(24, 24, 27, 0.04);
   }
 }
 
@@ -219,6 +234,9 @@ $card-dark: #121214;
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
   text-align: left;
 }
 
@@ -250,10 +268,12 @@ $card-dark: #121214;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s;
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.15), 0 2px 6px -1px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s;
 
   &:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.25), 0 6px 16px -2px rgba(0, 0, 0, 0.15);
   }
 }
 
