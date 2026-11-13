@@ -6,8 +6,8 @@
         <div class="avatar-fallback" style="display:none">CF</div>
       </div>
       <!-- Python Snake Easter Egg (appears on avatar hover) -->
-      <div class="python-egg" [class.active]="avatarHovered">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" class="python-svg">
+      <div class="python-egg" [class.active]="avatarHovered()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" class="python-svg" aria-hidden="true">
           <path d="M 10 10 Q 25 2, 40 10 T 70 10 T 90 10" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" class="snake-body" />
           <path d="M 90 10 L 95 8 M 90 10 L 95 12" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" class="snake-tongue" />
           <circle cx="85" cy="8" r="1.2" fill="#ffffff" />
@@ -66,13 +66,13 @@
     </section>
 
     <footer class="footer-block" (mouseenter)="triggerCrab()">
-      <p>Made with Angular. Hover here to meet Ferris.</p>
+      <p class="muted">Made with Angular • © 2026 Christian Farrell</p>
     </footer>
   </div>
 
   <!-- Ferris the Crab Easter Egg -->
-  <div class="crab-egg" [class.scuttle]="crabActive">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" class="crab-svg">
+  <div class="crab-egg" [class.scuttle]="crabActive()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" class="crab-svg" aria-hidden="true">
       <ellipse cx="30" cy="22" rx="14" ry="10" fill="#f97316" />
       <circle cx="23" cy="11" r="2.5" fill="#ffffff" />
       <circle cx="23" cy="11" r="1" fill="#000000" />

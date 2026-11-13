@@ -1,6 +1,14 @@
 $b: #e4e4e7;
 $m: #71717a;
 
+@mixin stack($w, $g) {
+  @media (max-width: $w) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $g;
+  }
+}
+
 .avatar-fallback,
 .tagline,
 .section-block h2,
@@ -9,8 +17,7 @@ $m: #71717a;
 .tag-label,
 .modal-close-btn,
 .modal-period,
-.modal-subtitle,
-.footer-block {
+.modal-subtitle {
   color: $m;
 }
 
@@ -42,11 +49,7 @@ $m: #71717a;
   gap: 2rem;
   margin-bottom: 6rem;
 
-  @media (max-width: 600px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
-  }
+  @include stack(600px, 1.5rem);
 }
 
 .avatar-wrapper {
@@ -107,7 +110,6 @@ $m: #71717a;
     background-color: #18181b;
     color: #faf9f6;
     border-color: #18181b;
-    transform: translateY(-1px);
   }
 }
 
@@ -115,8 +117,7 @@ $m: #71717a;
   margin-bottom: 5rem;
 
   h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
+  
     margin-bottom: 1.75rem;
     }
 }
@@ -144,11 +145,7 @@ $m: #71717a;
   gap: 1rem;
   margin-bottom: 0.5rem;
 
-  @media (max-width: 500px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
+  @include stack(500px, 0.25rem);
 }
 
 .card-title {
@@ -188,6 +185,8 @@ $m: #71717a;
   max-width: 580px;
   border-radius: 12px;
   padding: 0;
+  color: inherit;
+  overflow: visible;
 
   &[open] {
     animation: slide-up 0.3s;
@@ -266,16 +265,16 @@ $m: #71717a;
   transition: opacity 0.4s;
 }
 
-.active {
+.python-egg.active {
   opacity: 1;
-}
 
-.active path {
-  animation: snake-wiggle 1.2s infinite;
-}
+  path {
+    animation: snake-wiggle 1.2s infinite;
+  }
 
-.active path + path {
-  animation: tongue-flick 0.8s steps(1) infinite;
+  path + path {
+    animation: tongue-flick 0.8s steps(1) infinite;
+  }
 }
 
 .crab-egg {
@@ -286,17 +285,17 @@ $m: #71717a;
   pointer-events: none;
 }
 
-.scuttle {
+.crab-egg.scuttle {
   animation: crab-scuttle 12s linear;
-}
 
-.scuttle g {
-  animation: leg-walk 0.25s infinite;
-}
+  g {
+    animation: leg-walk 0.25s infinite;
+  }
 
-.scuttle .left-claw,
-.scuttle .right-claw {
-  animation: claw-snap 1.5s infinite;
+  .left-claw,
+  .right-claw {
+    animation: claw-snap 1.5s infinite;
+  }
 }
 
 .crab-legs-right {

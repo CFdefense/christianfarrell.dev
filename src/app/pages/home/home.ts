@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PROJECTS } from '../../data/projects.data';
 import { EXPERIENCES } from '../../data/experiences.data';
@@ -17,8 +17,8 @@ export class HomeComponent implements OnDestroy {
   readonly experiences: Experience[] = EXPERIENCES;
 
   activeItem: Project | Experience | null = null;
-  avatarHovered = false;
-  crabActive = false;
+  avatarHovered = signal(false);
+  crabActive = signal(false);
   private hoverTimer: any;
   private crabTimer: any;
 
@@ -50,20 +50,20 @@ export class HomeComponent implements OnDestroy {
 
   onAvatarEnter(): void {
     this.hoverTimer = setTimeout(() => {
-      this.avatarHovered = true;
+      this.avatarHovered.set(true);
     }, 1500); // 1.5 seconds trigger
   }
 
   onAvatarLeave(): void {
     clearTimeout(this.hoverTimer);
-    this.avatarHovered = false;
+    this.avatarHovered.set(false);
   }
 
   triggerCrab(): void {
-    if (this.crabActive) return;
-    this.crabActive = true;
+    if (this.crabActive()) return;
+    this.crabActive.set(true);
     this.crabTimer = setTimeout(() => {
-      this.crabActive = false;
+      this.crabActive.set(false);
     }, 12000); // Duration matches scuttle animation (12s)
   }
 
