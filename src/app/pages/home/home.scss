@@ -1,6 +1,7 @@
 $b: #e4e4e7;
 $m: #71717a;
 $dark: #18181b;
+$card-dark: #121214;
 
 .avatar-fallback,
 .muted,
@@ -236,7 +237,7 @@ $dark: #18181b;
 }
 
 .work-card {
-  background-color: $dark;
+  background-color: $card-dark;
   color: #fafafa;
   border-radius: 12px;
   overflow: hidden;
@@ -361,16 +362,18 @@ $dark: #18181b;
 
 .python-egg {
   position: absolute;
-  top: -1rem;
-  left: 3rem;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-140px); // Place it perfectly to the left of the centered avatar
   width: 7rem;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s;
+  transition: opacity 0.4s, transform 0.4s;
 }
 
 .python-egg.active {
   opacity: 1;
+  transform: translateX(-120px); // Slide closer slightly when hovered
 
   path {
     animation: snake-wiggle 1.2s infinite;
