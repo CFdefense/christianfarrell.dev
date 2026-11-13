@@ -1,39 +1,60 @@
-<main class="home">
-  <header class="home__header">
-    <a routerLink="/profile" class="home__avatar-link" aria-label="View profile">
-      <div class="home__avatar-placeholder">CF</div>
-    </a>
-    <div class="home__intro">
-      <h1>Christian Farrell</h1>
-      <p class="home__tagline">Software Engineer</p>
-    </div>
-  </header>
+<main class="home-canvas">
+  <div class="content-container">
+    <header class="profile-header">
+      <div class="avatar-wrapper">
+        <img src="avatar.jpg" alt="Christian Farrell" class="avatar-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="avatar-fallback" style="display:none">CF</div>
+      </div>
+      <div class="profile-intro">
+        <h1>Christian Farrell</h1>
+        <p class="tagline">Software Engineer</p>
+        <div class="social-badges">
+          <a href="mailto:hello@christianfarrell.dev" class="badge">Email</a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="badge">GitHub</a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="badge">LinkedIn</a>
+          <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="badge">X</a>
+        </div>
+      </div>
+    </header>
 
-  <section class="home__projects">
-    <h2>Work</h2>
-    <ul class="home__project-list">
-      @for (project of projects; track project.title) {
-        <li class="home__project-card">
-          <div class="home__project-card-header">
-            <span class="home__project-card-title">
-              @if (project.url) {
-                <a [href]="project.url" target="_blank" rel="noopener noreferrer">
-                  {{ project.title }}
-                </a>
-              } @else {
-                {{ project.title }}
+    <section class="section-block">
+      <h2>Work Experience</h2>
+      <div class="list-container">
+        @for (job of experiences; track job.role) {
+          <div class="card-item clickable" (click)="setActiveItem(job)">
+            <div class="card-header">
+              <span class="card-title">{{ job.role }} <span class="muted">@ {{ job.company }}</span></span>
+              <span class="card-meta">{{ job.period }}</span>
+            </div>
+            <p class="card-description">{{ job.shortDescription }}</p>
+            <div class="card-tags">
+              @for (tag of job.tags; track tag) {
+                <span class="tag-label">{{ tag }}</span>
               }
-            </span>
-            <span class="home__project-card-year">{{ project.year }}</span>
+            </div>
           </div>
-          <p class="home__project-card-description">{{ project.description }}</p>
-          <ul class="home__project-card-tags">
-            @for (tag of project.tags; track tag) {
-              <li class="home__project-card-tag">{{ tag }}</li>
-            }
-          </ul>
-        </li>
-      }
-    </ul>
-  </section>
+        }
+      </div>
+    </section>
+
+    <section class="section-block">
+      <h2>Projects & Explorations</h2>
+      <div class="list-container">
+        @for (project of projects; track project.title) {
+          <div class="card-item clickable" (click)="setActiveItem(project)">
+            <div class="card-header">
+              <span class="card-title">{{ project.title }}</span>
+              <span class="card-meta">{{ project.year }}</span>
+            </div>
+            <p class="card-description">{{ project.description }}</p>
+            <div class="card-tags">
+              @for (tag of project.tags; track tag) {
+                <span class="tag-label">{{ tag }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
 </main>
