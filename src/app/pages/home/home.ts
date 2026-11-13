@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PROJECTS } from '../../data/projects.data';
 import { EXPERIENCES } from '../../data/experiences.data';
@@ -12,11 +12,15 @@ import { Experience } from '../../models/experience.model';
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class HomeComponent {
+export class HomeComponent implements OnDestroy {
   readonly projects: Project[] = PROJECTS;
   readonly experiences: Experience[] = EXPERIENCES;
 
   activeItem: Project | Experience | null = null;
+  avatarHovered = false;
+  crabActive = false;
+  private hoverTimer: any;
+  private crabTimer: any;
 
   @ViewChild('detailDialog') dialogElement?: ElementRef<HTMLDialogElement>;
 
@@ -42,5 +46,29 @@ export class HomeComponent {
 
   asProject(item: any): Project {
     return item as Project;
+  }
+
+  onAvatarEnter(): void {
+    this.hoverTimer = setTimeout(() => {
+      this.avatarHovered = true;
+    }, 1500); // 1.5 seconds trigger
+  }
+
+  onAvatarLeave(): void {
+    clearTimeout(this.hoverTimer);
+    this.avatarHovered = false;
+  }
+
+  triggerCrab(): void {
+    if (this.crabActive) return;
+    this.crabActive = true;
+    this.crabTimer = setTimeout(() => {
+      this.crabActive = false;
+    }, 12000); // Duration matches scuttle animation (12s)
+  }
+
+  ngOnDestroy(): void {
+    if (this.hoverTimer) clearTimeout(this.hoverTimer);
+    if (this.crabTimer) clearTimeout(this.crabTimer);
   }
 }
