@@ -16,7 +16,7 @@ export class HomeComponent implements OnDestroy {
   readonly projects: Project[] = PROJECTS;
   readonly experiences: Experience[] = EXPERIENCES;
 
-  activeItem: Project | Experience | null = null;
+  activeItem = signal<Project | Experience | null>(null);
   avatarHovered = signal(false);
   crabActive = signal(false);
   private hoverTimer: any;
@@ -25,14 +25,19 @@ export class HomeComponent implements OnDestroy {
   @ViewChild('detailDialog') dialogElement?: ElementRef<HTMLDialogElement>;
 
   setActiveItem(item: Project | Experience | null): void {
-    this.activeItem = item;
+    if (this.activeItem() === item) return;
+    this.activeItem.set(item);
     if (item) {
       // Open native dialog modal asynchronously after template rendering
       setTimeout(() => {
-        this.dialogElement?.nativeElement.showModal();
+        if (this.dialogElement && typeof this.dialogElement.nativeElement.showModal === 'function') {
+          this.dialogElement.nativeElement.showModal();
+        }
       }, 0);
     } else {
-      this.dialogElement?.nativeElement.close();
+      if (this.dialogElement && typeof this.dialogElement.nativeElement.close === 'function') {
+        this.dialogElement.nativeElement.close();
+      }
     }
   }
 
@@ -51,7 +56,7 @@ export class HomeComponent implements OnDestroy {
   onAvatarEnter(): void {
     this.hoverTimer = setTimeout(() => {
       this.avatarHovered.set(true);
-    }, 1500); // 1.5 seconds trigger
+    }, 2000); // 2 seconds trigger (strictly per spec)
   }
 
   onAvatarLeave(): void {

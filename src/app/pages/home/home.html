@@ -99,31 +99,31 @@
 </main>
 
 <dialog #detailDialog class="modal-dialog" (close)="setActiveItem(null)" (click)="$event.target === detailDialog && setActiveItem(null)">
-  @if (activeItem) {
+  @if (activeItem(); as item) {
     <div class="modal-body">
       <button class="modal-close-btn" (click)="setActiveItem(null)" aria-label="Close modal">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
 
-      @if (isExperience(activeItem)) {
-        <span class="modal-period">{{ asExperience(activeItem).period }}</span>
-        <h2 class="modal-title">{{ asExperience(activeItem).role }}</h2>
-        <p class="modal-subtitle">{{ asExperience(activeItem).company }}</p>
-        <div class="modal-rich-text" [innerHTML]="asExperience(activeItem).fullDescription"></div>
+      @if (isExperience(item)) {
+        <span class="modal-period">{{ asExperience(item).period }}</span>
+        <h2 class="modal-title">{{ asExperience(item).role }}</h2>
+        <p class="modal-subtitle">{{ asExperience(item).company }}</p>
+        <div class="modal-rich-text" [innerHTML]="asExperience(item).fullDescription"></div>
       } @else {
-        <span class="modal-period">{{ asProject(activeItem).year }}</span>
+        <span class="modal-period">{{ asProject(item).year }}</span>
         <h2 class="modal-title">
-          @if (asProject(activeItem).url) {
-            <a [href]="asProject(activeItem).url" target="_blank" rel="noopener noreferrer">{{ asProject(activeItem).title }}</a>
+          @if (asProject(item).url) {
+            <a [href]="asProject(item).url" target="_blank" rel="noopener noreferrer">{{ asProject(item).title }}</a>
           } @else {
-            {{ asProject(activeItem).title }}
+            {{ asProject(item).title }}
           }
         </h2>
-        <p class="modal-rich-text">{{ asProject(activeItem).longDescription || asProject(activeItem).description }}</p>
+        <p class="modal-rich-text">{{ asProject(item).longDescription || asProject(item).description }}</p>
       }
 
       <div class="modal-tags">
-        @for (tag of activeItem.tags; track tag) {
+        @for (tag of item.tags; track tag) {
           <span class="tag-label">{{ tag }}</span>
         }
       </div>
