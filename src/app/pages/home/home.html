@@ -1,10 +1,13 @@
 <main class="home-canvas">
   <div class="content-container">
-    <header class="profile-header">
-      <div class="avatar-wrapper" (mouseenter)="onAvatarEnter()" (mouseleave)="onAvatarLeave()">
+    
+    <!-- Centered Profile Header Block -->
+    <header class="profile-header-centered">
+      <div class="avatar-wrapper-centered" (mouseenter)="onAvatarEnter()" (mouseleave)="onAvatarLeave()">
         <img src="avatar.jpg" alt="Christian Farrell" class="avatar-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
         <div class="avatar-fallback" style="display:none">CF</div>
       </div>
+      
       <!-- Python Snake Easter Egg (appears on avatar hover) -->
       <div class="python-egg" [class.active]="avatarHovered()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" class="python-svg" aria-hidden="true">
@@ -13,55 +16,119 @@
           <circle cx="85" cy="8" r="1.2" fill="#ffffff" />
         </svg>
       </div>
-      <div class="profile-intro">
+
+      <div class="profile-intro-centered">
         <h1>Christian Farrell</h1>
-        <p class="tagline">Software Engineer</p>
-        <div class="social-badges">
-          <a href="mailto:hello@christianfarrell.dev" class="badge">Email</a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="badge">GitHub</a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="badge">LinkedIn</a>
+        <div class="social-badges-centered">
+          <a href="mailto:hello@christianfarrell.dev" class="badge">Get in touch</a>
           <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="badge">X</a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="badge">LinkedIn</a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="badge">GitHub</a>
         </div>
+        <p class="summary-paragraph">
+          Software engineer based in Vancouver, Canada. Currently building high-fidelity web experiences, robust backend services, and scalable agentic toolkits.
+        </p>
       </div>
     </header>
 
-    <section class="section-block">
-      <h2>Work Experience</h2>
-      <div class="list-container">
+    <!-- Centered Explorations (Experiences) Section -->
+    <section class="section-block-centered">
+      <h2>Explorations</h2>
+      <div class="explorations-row">
         @for (job of experiences; track job.role) {
-          <div class="card-item clickable" (click)="setActiveItem(job)">
-            <div class="card-header">
-              <span class="card-title">{{ job.role }} <span class="muted">@ {{ job.company }}</span></span>
-              <span class="card-meta">{{ job.period }}</span>
-            </div>
-            <p class="card-description">{{ job.shortDescription }}</p>
-            <div class="card-tags">
-              @for (tag of job.tags; track tag) {
-                <span class="tag-label">{{ tag }}</span>
+          <div class="exploration-card" (click)="setActiveItem(job)">
+            <div class="card-visual-header">
+              @if (job.image) {
+                <img [src]="job.image" [alt]="job.company" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
               }
+              <div class="card-visual-fallback">{{ job.initials || 'EX' }}</div>
+            </div>
+            <div class="card-text-body">
+              <h3>{{ job.role }}</h3>
+              <p class="card-meta-muted">{{ job.company }} • {{ job.period }}</p>
             </div>
           </div>
         }
       </div>
     </section>
 
-    <section class="section-block">
-      <h2>Projects & Explorations</h2>
-      <div class="list-container">
-        @for (project of projects; track project.title) {
-          <div class="card-item clickable" (click)="setActiveItem(project)">
-            <div class="card-header">
-              <span class="card-title">{{ project.title }}</span>
-              <span class="card-meta">{{ project.year }}</span>
-            </div>
-            <p class="card-description">{{ project.description }}</p>
-            <div class="card-tags">
-              @for (tag of project.tags; track tag) {
-                <span class="tag-label">{{ tag }}</span>
-              }
-            </div>
-          </div>
-        }
+    <!-- Centered Work (Projects 3-Column Interlaced) Section -->
+    <section class="section-block-centered">
+      <h2>Work</h2>
+      <div class="work-interlaced-grid">
+        
+        <!-- Column 1 (Left) -->
+        <div class="grid-column col-left">
+          @for (project of projects; track project.title; let idx = $index) {
+            @if (idx % 3 === 0) {
+              <div class="work-card" (click)="setActiveItem(project)">
+                <div class="card-visual-header-dark">
+                  @if (project.image) {
+                    <img [src]="project.image" [alt]="project.title" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                  }
+                  <div class="card-visual-fallback-dark">PROJ</div>
+                </div>
+                <div class="card-text-body-dark">
+                  <h3>{{ project.title }}</h3>
+                  <div class="card-pill-tags">
+                    @for (tag of project.tags; track tag) {
+                      <span class="pill-tag">{{ tag }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <!-- Column 2 (Center) -->
+        <div class="grid-column col-center">
+          @for (project of projects; track project.title; let idx = $index) {
+            @if (idx % 3 === 1) {
+              <div class="work-card" (click)="setActiveItem(project)">
+                <div class="card-visual-header-dark">
+                  @if (project.image) {
+                    <img [src]="project.image" [alt]="project.title" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                  }
+                  <div class="card-visual-fallback-dark">PROJ</div>
+                </div>
+                <div class="card-text-body-dark">
+                  <h3>{{ project.title }}</h3>
+                  <div class="card-pill-tags">
+                    @for (tag of project.tags; track tag) {
+                      <span class="pill-tag">{{ tag }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <!-- Column 3 (Right) -->
+        <div class="grid-column col-right">
+          @for (project of projects; track project.title; let idx = $index) {
+            @if (idx % 3 === 2) {
+              <div class="work-card" (click)="setActiveItem(project)">
+                <div class="card-visual-header-dark">
+                  @if (project.image) {
+                    <img [src]="project.image" [alt]="project.title" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                  }
+                  <div class="card-visual-fallback-dark">PROJ</div>
+                </div>
+                <div class="card-text-body-dark">
+                  <h3>{{ project.title }}</h3>
+                  <div class="card-pill-tags">
+                    @for (tag of project.tags; track tag) {
+                      <span class="pill-tag">{{ tag }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
       </div>
     </section>
 
