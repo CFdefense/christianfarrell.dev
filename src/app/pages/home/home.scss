@@ -29,7 +29,7 @@ $card-dark: #121214;
 
 .content-container {
   width: 100%;
-  max-width: 960px;
+  max-width: 1280px;
 }
 
 .profile-header-centered {
@@ -41,6 +41,7 @@ $card-dark: #121214;
   margin-bottom: 6rem;
 
   h1 {
+    font-family: 'Lora', Georgia, serif;
     font-size: 2.25rem;
     font-weight: 600;
     margin: 1.25rem 0 1rem;
@@ -105,6 +106,7 @@ $card-dark: #121214;
 }
 
 .summary-paragraph {
+  font-family: 'Lora', Georgia, serif;
   max-width: 540px;
   margin: 1.5rem auto 0;
   line-height: 1.7;
@@ -115,21 +117,26 @@ $card-dark: #121214;
   text-align: center;
 
   h2 {
-    font-size: 1.25rem;
+    font-family: 'Lora', Georgia, serif;
+    font-size: 2rem;
     font-weight: 600;
-    margin-bottom: 1.75rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 2.5rem;
   }
 }
 
 .explorations-row {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 1.5rem;
-  flex-wrap: wrap;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .exploration-card {
-  width: 220px;
   background-color: #fff;
   border: 1px solid $b;
   border-radius: 12px;
@@ -143,20 +150,21 @@ $card-dark: #121214;
   }
 }
 
-.card-visual-header,
-.card-visual-header-dark {
-  height: 120px;
+.card-visual-header {
+  height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-}
-
-.card-visual-header {
   background-color: #f4f4f5;
 }
 
 .card-visual-header-dark {
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   background-color: #27272a;
 }
 
@@ -322,6 +330,7 @@ $card-dark: #121214;
 }
 
 .modal-title {
+  font-family: 'Lora', Georgia, serif;
   font-size: 1.75rem;
   font-weight: 600;
   margin: 0.5rem 0 0.25rem;
