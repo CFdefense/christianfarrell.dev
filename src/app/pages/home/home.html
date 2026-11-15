@@ -1,39 +1,180 @@
-<main class="home">
-  <header class="home__header">
-    <a routerLink="/profile" class="home__avatar-link" aria-label="View profile">
-      <div class="home__avatar-placeholder">CF</div>
-    </a>
-    <div class="home__intro">
-      <h1>Christian Farrell</h1>
-      <p class="home__tagline">Software Engineer</p>
-    </div>
-  </header>
+<main class="home-canvas">
+  <div class="content-container">
+    
+    <!-- Centered Profile Header Block -->
+    <header class="profile-header-centered">
+      <div class="avatar-wrapper-centered" (mouseenter)="onAvatarEnter()" (mouseleave)="onAvatarLeave()">
+        <img src="avatar.jpg" alt="Christian Farrell" class="avatar-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="avatar-fallback" style="display:none">CF</div>
+      </div>
+      
+      <!-- Python Snake Easter Egg (appears on avatar hover) -->
+      <div class="python-egg" [class.active]="avatarHovered()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" class="python-svg" aria-hidden="true">
+          <path d="M 10 10 Q 25 2, 40 10 T 70 10 T 90 10" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" class="snake-body" />
+          <path d="M 90 10 L 95 8 M 90 10 L 95 12" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" class="snake-tongue" />
+          <circle cx="85" cy="8" r="1.2" fill="#ffffff" />
+        </svg>
+      </div>
 
-  <section class="home__projects">
-    <h2>Work</h2>
-    <ul class="home__project-list">
-      @for (project of projects; track project.title) {
-        <li class="home__project-card">
-          <div class="home__project-card-header">
-            <span class="home__project-card-title">
-              @if (project.url) {
-                <a [href]="project.url" target="_blank" rel="noopener noreferrer">
-                  {{ project.title }}
-                </a>
-              } @else {
-                {{ project.title }}
+      <div class="profile-intro-centered">
+        <h1>Christian Farrell</h1>
+        <div class="social-badges-centered">
+          <a href="mailto:hello@christianfarrell.dev" class="badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Get in touch
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3"/></svg>
+            GitHub
+          </a>
+        </div>
+        <p class="summary-paragraph">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+        </p>
+      </div>
+    </header>
+
+    <!-- Centered Explorations (Experiences) Section -->
+    <section class="section-block-centered">
+      <h2>Work</h2>
+      <div class="explorations-row">
+        @for (job of experiences; track job.role) {
+          <div class="exploration-card" (click)="setActiveItem(job)">
+            <div class="card-visual-header">
+              @if (job.image) {
+                <img [src]="job.image" [alt]="job.company" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
               }
-            </span>
-            <span class="home__project-card-year">{{ project.year }}</span>
+              <div class="card-visual-fallback">{{ job.initials || 'EX' }}</div>
+            </div>
+            <div class="card-text-body">
+              <h3>{{ job.role }}</h3>
+              <p class="card-meta-muted">{{ job.company }} • {{ job.period }}</p>
+            </div>
           </div>
-          <p class="home__project-card-description">{{ project.description }}</p>
-          <ul class="home__project-card-tags">
-            @for (tag of project.tags; track tag) {
-              <li class="home__project-card-tag">{{ tag }}</li>
+        }
+      </div>
+    </section>
+
+    <!-- Centered Work (Projects 3-Column Interlaced) Section -->
+    <section class="section-block-centered">
+      <h2>Projects</h2>
+      <div class="work-interlaced-grid">
+        
+        <!-- Column 1 (Left) -->
+        <div class="grid-column col-left">
+          @for (project of projects; track project.title; let idx = $index) {
+            @if (idx % 3 === 0) {
+              <div class="work-card" (click)="setActiveItem(project)">
+                <div class="card-visual-header-dark">
+                  @if (project.image) {
+                    <img [src]="project.image" [alt]="project.title" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                  }
+                  <div class="card-visual-fallback-dark">PROJ</div>
+                </div>
+                <div class="card-text-body-dark">
+                  <h3>{{ project.title }}</h3>
+                  <div class="card-pill-tags">
+                    @for (tag of project.tags; track tag) {
+                      <span class="pill-tag">{{ tag }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
             }
-          </ul>
-        </li>
-      }
-    </ul>
-  </section>
+          }
+        </div>
+
+        <!-- Column 2 (Center) -->
+        <div class="grid-column col-center">
+          @for (project of projects; track project.title; let idx = $index) {
+            @if (idx % 3 === 1) {
+              <div class="work-card" (click)="setActiveItem(project)">
+                <div class="card-visual-header-dark">
+                  @if (project.image) {
+                    <img [src]="project.image" [alt]="project.title" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                  }
+                  <div class="card-visual-fallback-dark">PROJ</div>
+                </div>
+                <div class="card-text-body-dark">
+                  <h3>{{ project.title }}</h3>
+                  <div class="card-pill-tags">
+                    @for (tag of project.tags; track tag) {
+                      <span class="pill-tag">{{ tag }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <!-- Column 3 (Right) -->
+        <div class="grid-column col-right">
+          @for (project of projects; track project.title; let idx = $index) {
+            @if (idx % 3 === 2) {
+              <div class="work-card" (click)="setActiveItem(project)">
+                <div class="card-visual-header-dark">
+                  @if (project.image) {
+                    <img [src]="project.image" [alt]="project.title" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                  }
+                  <div class="card-visual-fallback-dark">PROJ</div>
+                </div>
+                <div class="card-text-body-dark">
+                  <h3>{{ project.title }}</h3>
+                  <div class="card-pill-tags">
+                    @for (tag of project.tags; track tag) {
+                      <span class="pill-tag">{{ tag }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+      </div>
+    </section>
+
+    <footer class="footer-block">
+      <p class="muted">Made with Angular • © 2026 Christian Farrell</p>
+    </footer>
+  </div>
 </main>
+
+<dialog #detailDialog class="modal-dialog" (close)="setActiveItem(null)" (click)="$event.target === detailDialog && setActiveItem(null)">
+  @if (activeItem(); as item) {
+    <div class="modal-body">
+      <button class="modal-close-btn" (click)="setActiveItem(null)" aria-label="Close modal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+
+      @if (isExperience(item)) {
+        <span class="modal-period">{{ asExperience(item).period }}</span>
+        <h2 class="modal-title">{{ asExperience(item).role }}</h2>
+        <p class="modal-subtitle">{{ asExperience(item).company }}</p>
+        <div class="modal-rich-text" [innerHTML]="asExperience(item).fullDescription"></div>
+      } @else {
+        <span class="modal-period">{{ asProject(item).year }}</span>
+        <h2 class="modal-title">
+          @if (asProject(item).url) {
+            <a [href]="asProject(item).url" target="_blank" rel="noopener noreferrer">{{ asProject(item).title }}</a>
+          } @else {
+            {{ asProject(item).title }}
+          }
+        </h2>
+        <p class="modal-rich-text">{{ asProject(item).longDescription || asProject(item).description }}</p>
+      }
+
+      <div class="modal-tags">
+        @for (tag of item.tags; track tag) {
+          <span class="tag-label">{{ tag }}</span>
+        }
+      </div>
+    </div>
+  }
+</dialog>
