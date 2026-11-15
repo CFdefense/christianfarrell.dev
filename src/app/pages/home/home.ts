@@ -18,9 +18,7 @@ export class HomeComponent implements OnDestroy {
 
   activeItem = signal<Project | Experience | null>(null);
   avatarHovered = signal(false);
-  crabActive = signal(false);
   private hoverTimer: any;
-  private crabTimer: any;
 
   @ViewChild('detailDialog') dialogElement?: ElementRef<HTMLDialogElement>;
 
@@ -64,16 +62,7 @@ export class HomeComponent implements OnDestroy {
     this.avatarHovered.set(false);
   }
 
-  triggerCrab(): void {
-    if (this.crabActive()) return;
-    this.crabActive.set(true);
-    this.crabTimer = setTimeout(() => {
-      this.crabActive.set(false);
-    }, 12000); // Duration matches scuttle animation (12s)
-  }
-
   ngOnDestroy(): void {
     if (this.hoverTimer) clearTimeout(this.hoverTimer);
-    if (this.crabTimer) clearTimeout(this.crabTimer);
   }
 }

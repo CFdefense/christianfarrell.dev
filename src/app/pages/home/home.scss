@@ -91,18 +91,18 @@ $card-dark: #121214;
 }
 
 .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.5rem 1.15rem;
   border-radius: 9999px;
   font-size: 0.85rem;
   color: $dark;
   box-shadow: 0 4px 12px rgba(24, 24, 27, 0.04), 0 1px 3px rgba(24, 24, 27, 0.02);
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
-    background-color: $dark;
-    color: #faf9f6;
-    border-color: $dark;
-    transform: translateY(-1px);
+    transform: scale(1.04);
     box-shadow: 0 10px 20px -5px rgba(24, 24, 27, 0.08), 0 4px 6px -2px rgba(24, 24, 27, 0.04);
   }
 }
@@ -413,39 +413,11 @@ $card-dark: #121214;
   }
 }
 
-.crab-egg {
-  position: fixed;
-  bottom: 0;
-  left: -100px;
-  width: 3.75rem;
-  pointer-events: none;
-}
-
-.crab-egg.scuttle {
-  animation: crab-scuttle 12s linear;
-
-  g {
-    animation: leg-walk 0.25s infinite;
-  }
-
-  .left-claw,
-  .right-claw {
-    animation: claw-snap 1.5s infinite;
-  }
-}
-
-.crab-legs-right {
-  --r: -1;
-}
-
 svg * {
   transform-box: fill-box;
 }
 
 @keyframes snake-wiggle { 50% { transform: scaleY(0.8); } }
 @keyframes tongue-flick { 50% { opacity: 0; } }
-@keyframes leg-walk { 50% { transform: rotate(calc(var(--r, 1) * 8deg)); } }
-@keyframes claw-snap { 50% { transform: rotate(-12deg); } }
-@keyframes crab-scuttle { to { transform: translateX(calc(100vw + 200px)); } }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes slide-up { from { opacity: 0; transform: translateY(20px) scale(0.98); } }
