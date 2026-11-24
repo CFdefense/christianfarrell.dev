@@ -1,7 +1,6 @@
 $b: #e4e4e7;
 $m: #71717a;
 $dark: #18181b;
-$card-dark: #121214;
 
 .avatar-fallback,
 .muted,
@@ -24,12 +23,12 @@ $card-dark: #121214;
   display: flex;
   justify-content: center;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip; // not hidden: hidden would make this a nested scroll container
 }
 
 .content-container {
   width: 100%;
-  max-width: 1400px;
+  max-width: 2000px;
 }
 
 .profile-header-centered {
@@ -37,16 +36,22 @@ $card-dark: #121214;
   display: flex;
   flex-direction: column;
   align-items: center;
+  // Drop the hero toward the vertical middle (slightly above center)
+  padding-top: clamp(0px, 6vh, 5rem);
   text-align: center;
-  margin-bottom: 6rem;
+  margin-bottom: 5rem; // matches .section-block-centered spacing
 
   h1 {
-    font-family: 'Lora', Georgia, serif;
     font-size: 2.25rem;
-    font-weight: 600;
-    margin: 1.25rem 0 1rem;
+    font-weight: 500;
+    margin: 1.5rem 0 2rem;
     letter-spacing: -0.025em;
   }
+}
+
+// Anchors the snake easter egg to the avatar rather than the whole header
+.avatar-anchor {
+  position: relative;
 }
 
 .avatar-wrapper-centered {
@@ -60,10 +65,16 @@ $card-dark: #121214;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  position: relative;
   transition: transform 0.3s;
 
   &:hover {
     transform: scale(1.05);
+  }
+
+  &:hover .avatar-overlay,
+  &:focus-visible .avatar-overlay {
+    opacity: 1;
   }
 
   img {
@@ -71,6 +82,20 @@ $card-dark: #121214;
     height: 100%;
     object-fit: cover;
   }
+}
+
+.avatar-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(24, 24, 27, 0.6);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.25s;
 }
 
 .avatar-fallback {
@@ -107,14 +132,20 @@ $card-dark: #121214;
   }
 }
 
+// The "Get in touch" badge is a <button>, so reset the browser's button styling
+button.badge {
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
 .summary-paragraph {
-  font-family: 'Lora', Georgia, serif;
   font-size: 2.25rem;
   font-weight: 500;
   line-height: 1.35;
   letter-spacing: -0.025em;
-  max-width: 860px;
-  margin: 2rem auto 0;
+  max-width: 1100px;
+  margin: 3.5rem auto 0;
   
   @media (max-width: 768px) {
     font-size: 1.5rem;
@@ -128,9 +159,8 @@ $card-dark: #121214;
   text-align: center;
 
   h2 {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 1.6rem;
+    font-weight: 500;
     letter-spacing: -0.02em;
     margin-bottom: 2.5rem;
   }
@@ -141,7 +171,7 @@ $card-dark: #121214;
   grid-template-columns: 1fr;
   gap: 1.5rem;
   width: 100%;
-  max-width: 1020px;
+  max-width: 1400px;
   margin: 0 auto;
 
   @media (min-width: 768px) {
@@ -165,6 +195,14 @@ $card-dark: #121214;
   }
 }
 
+// Keyboard focus ring for the clickable cards and the avatar
+.exploration-card:focus-visible,
+.project-media:focus-visible,
+.avatar-wrapper-centered:focus-visible {
+  outline: 2px solid $dark;
+  outline-offset: 3px;
+}
+
 .card-visual-header {
   height: 180px;
   display: flex;
@@ -174,23 +212,15 @@ $card-dark: #121214;
   background-color: #f4f4f5;
 }
 
-.card-visual-header-dark {
-  height: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background-color: #27272a;
-}
-
 .card-visual-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  box-sizing: border-box;
+  padding: 1rem;
+  object-fit: contain; // logos: show whole, never crop
 }
 
-.card-visual-fallback,
-.card-visual-fallback-dark {
+.card-visual-fallback {
   width: 100%;
   height: 100%;
   display: flex;
@@ -205,17 +235,11 @@ $card-dark: #121214;
   color: $m;
 }
 
-.card-visual-fallback-dark {
-  color: #a1a1aa;
-}
-
-.card-visual-img + .card-visual-fallback,
-.card-visual-img + .card-visual-fallback-dark {
+.card-visual-img + .card-visual-fallback {
   display: none;
 }
 
-.card-text-body,
-.card-text-body-dark {
+.card-text-body {
   padding: 1rem 1.25rem 1.25rem;
 
   h3 {
@@ -230,43 +254,31 @@ $card-dark: #121214;
   margin: 0;
 }
 
-.work-interlaced-grid {
+// Three equal columns. The middle column is raised relative to the outer two.
+.projects-grid {
+  --stagger: clamp(2rem, 6vw, 6rem);
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem 1.5rem;
   width: 100%;
-  max-width: 1360px;
-  margin: 0 auto;
   text-align: left;
-}
 
-.grid-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  transform: translateY(0);
-}
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding-top: var(--stagger);
 
-@media (min-width: 768px) {
-  .work-interlaced-grid {
-    grid-template-columns: repeat(3, 1fr);
-    align-items: start;
-  }
-
-  .col-center {
-    transform: translateY(40px);
-  }
-
-  .col-right {
-    transform: translateY(20px);
+    .project-item:nth-child(3n + 2) {
+      transform: translateY(calc(var(--stagger) * -1));
+    }
   }
 }
 
-.work-card {
-  background-color: $card-dark;
-  color: #fafafa;
-  border-radius: 12px;
+.project-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
+  background-color: #27272a;
+  border-radius: 12px;
   cursor: pointer;
   box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.15), 0 2px 6px -1px rgba(0, 0, 0, 0.08);
   transition: all 0.2s;
@@ -275,21 +287,91 @@ $card-dark: #121214;
     transform: translateY(-4px);
     box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.25), 0 6px 16px -2px rgba(0, 0, 0, 0.15);
   }
+
+  // Placeholder for projects that have no demo GIF yet
+  .project-wip {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a1a1aa;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  // Absolutely positioned so the GIF's own size can never stretch the card
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
-.card-pill-tags,
+.project-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.project-name {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 0;
+  cursor: pointer;
+}
+
+.project-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.project-link-btn {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 2rem;
+  padding: 0 7px;
+  border-radius: 9999px;
+  background-color: #fff;
+  border: 1px solid $b;
+  color: $dark;
+  font-size: 0.8rem;
+  white-space: nowrap;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// Label is collapsed by default and expands on hover/keyboard focus
+.project-link-label {
+  max-width: 0;
+  margin-left: 0;
+  margin-right: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-width 0.25s ease, margin 0.25s ease, opacity 0.2s ease;
+}
+
+.project-link-btn:hover .project-link-label,
+.project-link-btn:focus-visible .project-link-label {
+  max-width: 5rem;
+  margin-left: 0.4rem;
+  margin-right: 0.2rem;
+  opacity: 1;
+}
+
 .modal-tags {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
-}
-
-.pill-tag {
-  font-size: 0.7rem;
-  padding: 0.15rem 0.6rem;
-  border-radius: 9999px;
-  background-color: #3f3f46;
-  color: #e4e4e7;
 }
 
 .tag-label {
@@ -308,7 +390,8 @@ $card-dark: #121214;
   border-radius: 12px;
   padding: 0;
   color: inherit;
-  overflow: visible;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto; // long popups (multi-position experience, projects) scroll inside the dialog
 
   &[open] {
     animation: slide-up 0.3s;
@@ -350,9 +433,8 @@ $card-dark: #121214;
 }
 
 .modal-title {
-  font-family: 'Lora', Georgia, serif;
   font-size: 1.75rem;
-  font-weight: 600;
+  font-weight: 500;
   margin: 0.5rem 0 0.25rem;
   letter-spacing: -0.02em;
 
@@ -367,26 +449,133 @@ $card-dark: #121214;
   margin: 0 0 1.5rem;
 }
 
+// Project popups are wider so the demo GIF can be shown large
+.modal-dialog:has(.modal-body-project) {
+  max-width: 880px;
+}
+
+.modal-body-project .modal-close-btn {
+  z-index: 1;
+  background-color: #fff;
+  border: 1px solid $b;
+}
+
+.modal-demo {
+  margin: 1.5rem 0 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #27272a;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.modal-award {
+  margin: 0 0 0.75rem;
+  font-weight: 500;
+}
+
+.modal-section-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $m;
+  margin: 0 0 0.75rem;
+}
+
+.modal-highlights {
+  margin: 0 0 2rem;
+  padding-left: 1.25rem;
+  line-height: 1.7;
+}
+
+// Title block on the left, GitHub / Live demo buttons top right under the demo GIF
+.modal-project-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.modal-links {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.75rem;
+}
+
+.modal-link {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid $b;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+
+  &:hover {
+    background-color: #faf9f6;
+  }
+}
+
 .modal-rich-text {
   line-height: 1.7;
   margin-bottom: 2rem;
 
-  ul {
-    margin: 0;
-    padding-left: 1.25rem;
-  }
+  // Experience popups inject their HTML with [innerHTML], so those nodes have no Angular
+  // style-scoping attribute and the rules below need ::ng-deep to reach them.
+  ::ng-deep {
+    ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
 
-  li {
-    margin-bottom: 0.25rem;
+    li {
+      margin-bottom: 0.25rem;
+    }
+
+    // One heading + meta line per position when a popup covers several roles at the same place
+    h4 {
+      margin: 1.75rem 0 0.15rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    .role-meta {
+      margin: 0 0 0.6rem;
+      font-size: 0.85rem;
+      color: $m;
+    }
   }
 }
 
 .footer-block {
+  --crab-w: clamp(220px, 26vw, 480px);
+  --gopher-w: clamp(100px, 11vw, 180px);
+  position: relative;
   margin-top: 8rem;
-  padding-top: 2rem;
+  padding-top: 1rem;
   border-top: 1px solid $b;
   text-align: center;
   font-size: 0.85rem;
+
+  p {
+    margin: 0;
+  }
+
+  // Wide screens: the footer is as tall as the crab, with the text just under the footer line between the
+  // mascots, and it extends into the page's bottom padding so everything sits at the page bottom.
+  @media (min-width: 900px) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: calc(var(--crab-w) * 0.395 + 2rem); // crab GIF canvas is 760x300
+    margin-bottom: -6rem; // cancel .home-canvas bottom padding
+  }
 }
 
 .python-egg {
@@ -421,3 +610,361 @@ svg * {
 @keyframes tongue-flick { 50% { opacity: 0; } }
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes slide-up { from { opacity: 0; transform: translateY(20px) scale(0.98); } }
+
+// ---- Page load animation sequence ----
+// 1. avatar + name fade down  2. options bar fades up
+// 3. summary fades in line by line
+// (the experiences then pop in via the `.reveal` styles in styles.scss)
+// `backwards` fill only applies the start state before/while animating, so
+// hover transforms on these elements keep working afterwards.
+.avatar-anchor,
+.profile-header-centered h1 {
+  animation: fade-down 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.05s backwards;
+}
+
+.social-badges-centered {
+  animation: fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.3s backwards;
+}
+
+.summary-paragraph {
+  .word {
+    display: inline-block;
+    opacity: 0;
+  }
+
+  &.ready .word {
+    opacity: 1;
+    animation: line-fade 0.6s ease-out calc(0.65s + var(--line, 0) * 0.12s) backwards;
+  }
+}
+
+@keyframes fade-down { from { opacity: 0; transform: translateY(-24px); } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(24px); } }
+@keyframes line-fade { from { opacity: 0; transform: translateY(8px); filter: blur(4px); } }
+
+// ---- Footer mascots (start when the footer scrolls into view) ----
+// The stage covers the footer; the mascots stand on its bottom edge (the bottom of the page).
+.footer-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+// The images have opaque white backgrounds; multiply blends them into the page color.
+.mascot-crab,
+.mascot-gopher {
+  display: none;
+  position: absolute;
+  mix-blend-mode: multiply;
+
+  @media (min-width: 900px) {
+    display: block;
+  }
+}
+
+// The GIF plays once (loop flag removed) and holds its last frame. Inside the 760px canvas
+// the crab walks ~436px (57.4% of the width), so the image is shifted left by that much:
+// the crab starts off-screen, walks in, and stops at the left of the footer.
+.mascot-crab {
+  left: 1rem;
+  bottom: 0;
+  width: var(--crab-w);
+  transform: translateX(-57.4%);
+}
+
+// The gopher GIF canvas has ~9% (of its width) of empty space under the feet, so bottom: 0 already
+// puts his feet just above the page edge; the extra offset raises him a bit more.
+.mascot-gopher {
+  // Negative offset pulls him toward the page edge (page padding is 2rem and the GIF has
+  // ~32% of its width as empty margin on the right). More negative = closer to the edge.
+  right: calc(-0.75rem - var(--gopher-w) * 0.1);
+  bottom: calc(var(--gopher-w) * -0.02);
+  width: var(--gopher-w);
+  transform-origin: 50% 100%;
+  animation: gopher-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+@keyframes gopher-pop { from { opacity: 0; transform: scale(0.2); } }
+
+.contact-emails {
+  list-style: none;
+  margin: 0 0 1.75rem;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+
+  li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+}
+
+.contact-label {
+  flex: 0 0 4.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $m;
+}
+
+.contact-form {
+  display: grid;
+  gap: 0.75rem;
+
+  input,
+  textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid $b;
+    border-radius: 8px;
+    font: inherit;
+    color: inherit;
+    background-color: #fff;
+
+    &:focus-visible {
+      outline: 2px solid $dark;
+      outline-offset: 1px;
+    }
+  }
+
+  textarea {
+    min-height: 8rem;
+    resize: vertical;
+  }
+}
+
+.contact-submit {
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 9999px;
+  background-color: $dark;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: default;
+  }
+}
+
+.contact-error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #b91c1c;
+}
+
+// About me popup is wide so the horizontal timeline has room
+.modal-dialog:has(.modal-body-about) {
+  max-width: 1100px;
+}
+
+.about-intro {
+  max-width: 68ch;
+
+  .modal-title {
+    margin-bottom: 0.25rem;
+  }
+
+  .modal-rich-text {
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// About me timeline: a horizontal line with a dot and a card per entry
+.timeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem 0 0.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid $b;
+
+  .modal-section-title {
+    margin: 0;
+  }
+}
+
+.timeline-nav {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    display: flex;
+    padding: 0.4rem;
+    border: 1px solid $b;
+    border-radius: 50%;
+    background-color: #fff;
+    color: $m;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #faf9f6;
+      color: $dark;
+    }
+  }
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 1rem;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  // fade the cards out at the edges to hint that the row scrolls
+  mask-image: linear-gradient(to right, transparent 0, #000 1.5rem, #000 calc(100% - 2.5rem), transparent 100%);
+
+  li {
+    position: relative;
+    flex: 0 0 15rem;
+    padding: 3.25rem 1rem 0 0; // top space holds the year label above the line
+    scroll-snap-align: start;
+
+    // the line, continuous across entries
+    &::before {
+      content: '';
+      position: absolute;
+      top: 26px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: $b;
+    }
+
+    // the dot, with a white ring so the line looks interrupted around it
+    &::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 1.25rem;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: $dark;
+      box-shadow: 0 0 0 4px #fff;
+      z-index: 1;
+    }
+
+    &:first-child {
+      margin-left: 1.5rem;
+    }
+  }
+}
+
+// Year label above the first entry of each year
+.timeline-year {
+  position: absolute;
+  top: 0;
+  left: 0.1rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: $dark;
+}
+
+.timeline-card {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0.9rem 1rem;
+  border: 1px solid $b;
+  border-radius: 10px;
+  background-color: #faf9f6;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(24, 24, 27, 0.08);
+  }
+}
+
+.timeline-date {
+  justify-self: start;
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+  background-color: $dark;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timeline-title {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+// About me header: photo on the left, name / role / bio on the right
+.about-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+.about-photo {
+  flex-shrink: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid $b;
+  box-shadow: 0 8px 24px -6px rgba(24, 24, 27, 0.12);
+
+  @media (max-width: 640px) {
+    width: 96px;
+    height: 96px;
+  }
+}
+
+.about-role {
+  margin: 0 0 1.25rem;
+  color: $m;
+}
+
+// Quick facts: three cards under the bio
+.about-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.about-fact {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  padding: 1rem 1.15rem;
+  border: 1px solid $b;
+  border-radius: 10px;
+  background-color: #faf9f6;
+}
+
+.about-fact-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $m;
+}
+
+.about-fact-value {
+  line-height: 1.5;
+}
