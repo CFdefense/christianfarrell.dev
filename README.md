@@ -16,8 +16,6 @@ npm run build # production build
 
 # Inspiration
 
-https://www.attiq.design/
-
 - Projects are displayed nicely
 - Header is simple
 - Keep simple
@@ -25,7 +23,6 @@ https://www.attiq.design/
 - Simple Animations
 - Maybe opening animation
 
-- profile pic that looks clickable -> /profile
 - Small redirects to socials and a connect page
 - Projects Below
 
