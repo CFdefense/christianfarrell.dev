@@ -3,9 +3,16 @@
     
     <!-- Centered Profile Header Block -->
     <header class="profile-header-centered">
-      <div class="avatar-wrapper-centered" (mouseenter)="onAvatarEnter()" (mouseleave)="onAvatarLeave()">
+      <!-- Decorative tilted panels flanking the hero (hidden on narrower screens) -->
+      <app-terminal-panel />
+      <app-graph-panel />
+
+      <div class="avatar-anchor">
+
+      <div class="avatar-wrapper-centered" role="button" tabindex="0" aria-label="About me" (mouseenter)="onAvatarEnter()" (mouseleave)="onAvatarLeave()" (click)="aboutDialog.showModal()" (keydown.enter)="aboutDialog.showModal()" (keydown.space)="$event.preventDefault(); aboutDialog.showModal()">
         <img src="avatar.jpg" alt="Christian Farrell" class="avatar-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
         <div class="avatar-fallback" style="display:none">CF</div>
+        <div class="avatar-overlay" aria-hidden="true">About me</div>
       </div>
       
       <!-- Python Snake Easter Egg (appears on avatar hover) -->
@@ -16,35 +23,36 @@
           <circle cx="85" cy="8" r="1.2" fill="#ffffff" />
         </svg>
       </div>
+      </div>
 
       <div class="profile-intro-centered">
         <h1>Christian Farrell</h1>
         <div class="social-badges-centered">
-          <a href="mailto:hello@christianfarrell.dev" class="badge">
+          <button type="button" class="badge" (click)="contactDialog.showModal()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
             Get in touch
-          </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="badge">
+          </button>
+          <a href="https://www.linkedin.com/in/christian-farrell-b6a268211/" target="_blank" rel="noopener noreferrer" class="badge">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
             LinkedIn
           </a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="badge">
+          <a href="https://github.com/CFdefense" target="_blank" rel="noopener noreferrer" class="badge">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3"/></svg>
             GitHub
           </a>
         </div>
-        <p class="summary-paragraph">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+        <p class="summary-paragraph" [class.ready]="lineIndex().length > 0">
+          @for (word of summaryWords; track $index) {<span class="word" [style.--line]="lineIndex()[$index] ?? 0">{{ word }}</span>{{ ' ' }}}
         </p>
       </div>
     </header>
 
     <!-- Centered Explorations (Experiences) Section -->
     <section class="section-block-centered">
-      <h2>Work</h2>
+      <h2 appReveal [revealAfterLoad]="1.2">Work Experience</h2>
       <div class="explorations-row">
-        @for (job of experiences; track job.role) {
-          <div class="exploration-card" (click)="setActiveItem(job)">
+        @for (job of experiences; track job.role; let i = $index) {
+          <div class="exploration-card" appReveal [revealDelay]="i * 0.08" [revealAfterLoad]="1.3" role="button" tabindex="0" [attr.aria-label]="job.role + ', ' + job.company + ': show details'" (click)="setActiveItem(job)" (keydown.enter)="setActiveItem(job)" (keydown.space)="$event.preventDefault(); setActiveItem(job)">
             <div class="card-visual-header">
               @if (job.image) {
                 <img [src]="job.image" [alt]="job.company" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
@@ -60,114 +68,120 @@
       </div>
     </section>
 
-    <!-- Centered Work (Projects 3-Column Interlaced) Section -->
+    <!-- Projects Section -->
     <section class="section-block-centered">
       <h2>Projects</h2>
-      <div class="work-interlaced-grid">
-        
-        <!-- Column 1 (Left) -->
-        <div class="grid-column col-left">
-          @for (project of projects; track project.title; let idx = $index) {
-            @if (idx % 3 === 0) {
-              <div class="work-card" (click)="setActiveItem(project)">
-                <div class="card-visual-header-dark">
-                  @if (project.image) {
-                    <img [src]="project.image" [alt]="project.title" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                  }
-                  <div class="card-visual-fallback-dark">PROJ</div>
-                </div>
-                <div class="card-text-body-dark">
-                  <h3>{{ project.title }}</h3>
-                  <div class="card-pill-tags">
-                    @for (tag of project.tags; track tag) {
-                      <span class="pill-tag">{{ tag }}</span>
-                    }
-                  </div>
-                </div>
+      <div class="projects-grid">
+        @for (project of projects; track project.title) {
+          <article class="project-item">
+            <!-- Demo GIF; left as an empty square for projects without one yet -->
+            <div class="project-media" role="button" tabindex="0" [attr.aria-label]="project.title + ': show details'" (click)="setActiveItem(project)" (keydown.enter)="setActiveItem(project)" (keydown.space)="$event.preventDefault(); setActiveItem(project)">
+              @if (project.image) {
+                <img [src]="project.image" [alt]="project.title + ' demo'" loading="lazy" decoding="async">
+              } @else {
+                <span class="project-wip">Work in Progress</span>
+              }
+            </div>
+            <div class="project-footer">
+              <h3 class="project-name" (click)="setActiveItem(project)">{{ project.title }}</h3>
+              <div class="project-links">
+                @if (project.githubUrl) {
+                  <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="GitHub repository for {{ project.title }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3"/></svg>
+                    <span class="project-link-label" aria-hidden="true">GitHub</span>
+                  </a>
+                }
+                @if (project.liveUrl) {
+                  <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="Live demo of {{ project.title }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                    <span class="project-link-label" aria-hidden="true">Demo</span>
+                  </a>
+                }
               </div>
-            }
-          }
-        </div>
-
-        <!-- Column 2 (Center) -->
-        <div class="grid-column col-center">
-          @for (project of projects; track project.title; let idx = $index) {
-            @if (idx % 3 === 1) {
-              <div class="work-card" (click)="setActiveItem(project)">
-                <div class="card-visual-header-dark">
-                  @if (project.image) {
-                    <img [src]="project.image" [alt]="project.title" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                  }
-                  <div class="card-visual-fallback-dark">PROJ</div>
-                </div>
-                <div class="card-text-body-dark">
-                  <h3>{{ project.title }}</h3>
-                  <div class="card-pill-tags">
-                    @for (tag of project.tags; track tag) {
-                      <span class="pill-tag">{{ tag }}</span>
-                    }
-                  </div>
-                </div>
-              </div>
-            }
-          }
-        </div>
-
-        <!-- Column 3 (Right) -->
-        <div class="grid-column col-right">
-          @for (project of projects; track project.title; let idx = $index) {
-            @if (idx % 3 === 2) {
-              <div class="work-card" (click)="setActiveItem(project)">
-                <div class="card-visual-header-dark">
-                  @if (project.image) {
-                    <img [src]="project.image" [alt]="project.title" class="card-visual-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                  }
-                  <div class="card-visual-fallback-dark">PROJ</div>
-                </div>
-                <div class="card-text-body-dark">
-                  <h3>{{ project.title }}</h3>
-                  <div class="card-pill-tags">
-                    @for (tag of project.tags; track tag) {
-                      <span class="pill-tag">{{ tag }}</span>
-                    }
-                  </div>
-                </div>
-              </div>
-            }
-          }
-        </div>
-
+            </div>
+          </article>
+        }
       </div>
     </section>
 
     <footer class="footer-block">
       <p class="muted">Made with Angular • © 2026 Christian Farrell</p>
+
+      <!-- Footer mascots: each GIF is mounted when the footer scrolls into view so it plays from its first frame -->
+      <div class="footer-stage" #footerStage aria-hidden="true">
+        @if (crabVisible()) {
+          <img class="mascot-crab" src="animations/crab.gif" alt="">
+        }
+        @if (gopherVisible()) {
+          <img class="mascot-gopher" src="animations/gopher.gif" alt="">
+        }
+      </div>
     </footer>
   </div>
 </main>
 
-<dialog #detailDialog class="modal-dialog" (close)="setActiveItem(null)" (click)="$event.target === detailDialog && setActiveItem(null)">
+<dialog #detailDialog class="modal-dialog" aria-labelledby="detail-title" (close)="setActiveItem(null)" (click)="$event.target === detailDialog ? setActiveItem(null) : null">
   @if (activeItem(); as item) {
-    <div class="modal-body">
+    <div class="modal-body" [class.modal-body-project]="!isExperience(item)">
       <button class="modal-close-btn" (click)="setActiveItem(null)" aria-label="Close modal">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
 
       @if (isExperience(item)) {
         <span class="modal-period">{{ asExperience(item).period }}</span>
-        <h2 class="modal-title">{{ asExperience(item).role }}</h2>
+        <h2 id="detail-title" class="modal-title">{{ asExperience(item).role }}</h2>
         <p class="modal-subtitle">{{ asExperience(item).company }}</p>
         <div class="modal-rich-text" [innerHTML]="asExperience(item).fullDescription"></div>
       } @else {
-        <span class="modal-period">{{ asProject(item).year }}</span>
-        <h2 class="modal-title">
-          @if (asProject(item).url) {
-            <a [href]="asProject(item).url" target="_blank" rel="noopener noreferrer">{{ asProject(item).title }}</a>
-          } @else {
-            {{ asProject(item).title }}
-          }
-        </h2>
+        @if (asProject(item).image) {
+          <div class="modal-demo">
+            <img [src]="asProject(item).image" [alt]="asProject(item).title + ' demo'" decoding="async">
+          </div>
+        }
+        <div class="modal-project-head">
+          <div>
+            <span class="modal-period">{{ asProject(item).year }}@if (!asProject(item).image) { · Work in Progress}</span>
+            <h2 id="detail-title" class="modal-title">
+              @if (asProject(item).liveUrl || asProject(item).githubUrl) {
+                <a [href]="asProject(item).liveUrl || asProject(item).githubUrl" target="_blank" rel="noopener noreferrer">{{ asProject(item).title }}</a>
+              } @else {
+                {{ asProject(item).title }}
+              }
+            </h2>
+            @if (asProject(item).award) {
+              <p class="modal-award">{{ asProject(item).award }}</p>
+            }
+          </div>
+          <div class="modal-links">
+            @if (asProject(item).githubUrl) {
+              <a [href]="asProject(item).githubUrl" target="_blank" rel="noopener noreferrer" class="modal-link">GitHub</a>
+            }
+            @if (asProject(item).liveUrl) {
+              <a [href]="asProject(item).liveUrl" target="_blank" rel="noopener noreferrer" class="modal-link">Live demo</a>
+            }
+          </div>
+        </div>
         <p class="modal-rich-text">{{ asProject(item).longDescription || asProject(item).description }}</p>
+        @if (asProject(item).highlights?.length) {
+          <h3 class="modal-section-title">Highlights</h3>
+          <ul class="modal-highlights">
+            @for (point of asProject(item).highlights; track point) {
+              <li>{{ point }}</li>
+            }
+          </ul>
+        }
+        @for (section of asProject(item).sections; track section.title) {
+          <h3 class="modal-section-title">{{ section.title }}</h3>
+          <ul class="modal-highlights">
+            @for (point of section.points; track point) {
+              <li>{{ point }}</li>
+            }
+          </ul>
+        }
+        @if (asProject(item).contribution) {
+          <h3 class="modal-section-title">My contribution</h3>
+          <p class="modal-rich-text">{{ asProject(item).contribution }}</p>
+        }
       }
 
       <div class="modal-tags">
@@ -177,4 +191,101 @@
       </div>
     </div>
   }
+</dialog>
+
+<dialog #aboutDialog class="modal-dialog" aria-labelledby="about-title" (click)="$event.target === aboutDialog ? aboutDialog.close() : null">
+  <div class="modal-body modal-body-about">
+    <button class="modal-close-btn" (click)="aboutDialog.close()" aria-label="Close modal">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="about-header">
+      <img src="avatar.jpg" alt="Christian Farrell" class="about-photo">
+      <div class="about-intro">
+        <span class="modal-period">About me</span>
+        <h2 id="about-title" class="modal-title">Christian Farrell</h2>
+        <p class="about-role">Backend Developer · IBM Storage Scale</p>
+        <p class="modal-rich-text">
+          I grew up in Woodbury, Connecticut, where I found an early passion for computing. I went on to study at Marist University, earning my B.S. in Computer Science (Software Development) in 2026 and continuing on to an M.S. in Artificial Intelligence.
+        </p>
+        <p class="modal-rich-text">
+          Today I'm a backend developer on IBM Storage Scale, working on test automation, AI agents and enterprise storage.
+        </p>
+      </div>
+    </div>
+
+    <div class="about-facts">
+      <div class="about-fact">
+        <span class="about-fact-label">Now</span>
+        <span class="about-fact-value">Backend Developer at IBM Storage Scale</span>
+      </div>
+      <div class="about-fact">
+        <span class="about-fact-label">Education</span>
+        <span class="about-fact-value">B.S. Computer Science, summa cum laude, 2026 · M.S. Artificial Intelligence, Marist University</span>
+      </div>
+      <div class="about-fact">
+        <span class="about-fact-label">From</span>
+        <span class="about-fact-value">Woodbury, Connecticut</span>
+      </div>
+    </div>
+
+    <div class="timeline-header">
+      <h3 class="modal-section-title">Timeline</h3>
+      <div class="timeline-nav">
+        <button type="button" (click)="tl.scrollBy({ left: -480, behavior: 'smooth' })" aria-label="Scroll timeline left">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button type="button" (click)="tl.scrollBy({ left: 480, behavior: 'smooth' })" aria-label="Scroll timeline right">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+    <ol class="timeline" #tl>
+      @for (entry of timeline; track entry.title) {
+        <li>
+          @if (entry.startsYear) {
+            <span class="timeline-year">{{ entry.year }}</span>
+          }
+          <div class="timeline-card">
+            <span class="timeline-date">{{ entry.date }}</span>
+            <span class="timeline-title">{{ entry.title }}</span>
+          </div>
+        </li>
+      }
+    </ol>
+  </div>
+</dialog>
+
+<dialog #contactDialog class="modal-dialog" aria-labelledby="contact-title" (click)="$event.target === contactDialog ? contactDialog.close() : null">
+  <div class="modal-body">
+    <button class="modal-close-btn" (click)="contactDialog.close()" aria-label="Close modal">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <span class="modal-period">Contact</span>
+    <h2 id="contact-title" class="modal-title">Get in touch</h2>
+    <p class="modal-rich-text">I'm open to new opportunities and happy to hear from you. Send a message below or email me directly.</p>
+
+    <ul class="contact-emails">
+      <li><span class="contact-label">Personal</span><a href="mailto:CFdefence@gmail.com">CFdefence@gmail.com</a></li>
+      <li><span class="contact-label">Work</span><a href="mailto:christian.farrell@ibm.com">christian.farrell&#64;ibm.com</a></li>
+      <li><span class="contact-label">School</span><a href="mailto:christian.farrell1@marist.edu">christian.farrell1&#64;marist.edu</a></li>
+    </ul>
+
+    <form class="contact-form" (submit)="sendContact($event, contactDialog)">
+      <input type="text" name="name" placeholder="Your Name" required aria-label="Your name">
+      <input type="email" name="email" placeholder="Your Email" required aria-label="Your email">
+      <textarea name="message" placeholder="Your Message" required aria-label="Your message"></textarea>
+      <button type="submit" class="contact-submit" [disabled]="contactStatus() === 'sending' || contactStatus() === 'sent'">
+        @switch (contactStatus()) {
+          @case ('sending') { Sending... }
+          @case ('sent') { Message sent! }
+          @default { Send Message }
+        }
+      </button>
+      @if (contactStatus() === 'error') {
+        <p class="contact-error" role="alert">Something went wrong. Please try again or email me directly.</p>
+      }
+    </form>
+  </div>
 </dialog>
