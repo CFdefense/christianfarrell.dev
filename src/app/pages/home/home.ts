@@ -34,9 +34,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   private host = inject(ElementRef<HTMLElement>);
 
   activeItem = signal<Project | Experience | null>(null);
-  avatarHovered = signal(false);
   contactStatus = signal<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  private hoverTimer: any;
 
   @ViewChild('detailDialog') dialogElement?: ElementRef<HTMLDialogElement>;
   @ViewChild('footerStage') footerStage?: ElementRef<HTMLElement>;
@@ -138,19 +136,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     return item as Project;
   }
 
-  onAvatarEnter(): void {
-    this.hoverTimer = setTimeout(() => {
-      this.avatarHovered.set(true);
-    }, 2000); // 2 seconds trigger (strictly per spec)
-  }
-
-  onAvatarLeave(): void {
-    clearTimeout(this.hoverTimer);
-    this.avatarHovered.set(false);
-  }
-
   ngOnDestroy(): void {
-    if (this.hoverTimer) clearTimeout(this.hoverTimer);
     if (this.gopherTimer) clearTimeout(this.gopherTimer);
     this.mascotObserver?.disconnect();
   }

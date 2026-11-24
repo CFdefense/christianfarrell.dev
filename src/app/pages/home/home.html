@@ -9,20 +9,12 @@
 
       <div class="avatar-anchor">
 
-      <div class="avatar-wrapper-centered" role="button" tabindex="0" aria-label="About me" (mouseenter)="onAvatarEnter()" (mouseleave)="onAvatarLeave()" (click)="aboutDialog.showModal()" (keydown.enter)="aboutDialog.showModal()" (keydown.space)="$event.preventDefault(); aboutDialog.showModal()">
+      <div class="avatar-wrapper-centered" role="button" tabindex="0" aria-label="About me" (click)="aboutDialog.showModal()" (keydown.enter)="aboutDialog.showModal()" (keydown.space)="$event.preventDefault(); aboutDialog.showModal()">
         <img src="avatar.jpg" alt="Christian Farrell" class="avatar-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
         <div class="avatar-fallback" style="display:none">CF</div>
         <div class="avatar-overlay" aria-hidden="true">About me</div>
       </div>
       
-      <!-- Python Snake Easter Egg (appears on avatar hover) -->
-      <div class="python-egg" [class.active]="avatarHovered()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" class="python-svg" aria-hidden="true">
-          <path d="M 10 10 Q 25 2, 40 10 T 70 10 T 90 10" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" class="snake-body" />
-          <path d="M 90 10 L 95 8 M 90 10 L 95 12" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" class="snake-tongue" />
-          <circle cx="85" cy="8" r="1.2" fill="#ffffff" />
-        </svg>
-      </div>
       </div>
 
       <div class="profile-intro-centered">
@@ -211,21 +203,6 @@
         <p class="modal-rich-text">
           Today I'm a backend developer on IBM Storage Scale, working on test automation, AI agents and enterprise storage.
         </p>
-      </div>
-    </div>
-
-    <div class="about-facts">
-      <div class="about-fact">
-        <span class="about-fact-label">Now</span>
-        <span class="about-fact-value">Backend Developer at IBM Storage Scale</span>
-      </div>
-      <div class="about-fact">
-        <span class="about-fact-label">Education</span>
-        <span class="about-fact-value">B.S. Computer Science, summa cum laude, 2026 · M.S. Artificial Intelligence, Marist University</span>
-      </div>
-      <div class="about-fact">
-        <span class="about-fact-label">From</span>
-        <span class="about-fact-value">Woodbury, Connecticut</span>
       </div>
     </div>
 
