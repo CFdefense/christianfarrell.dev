@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 
+/** Colour class applied to a line of command output. */
 type Tone = 'ok' | 'link' | 'dim' | 'err' | 'info';
 
+/** A line currently shown in the terminal: a typed command or its output. */
 interface TerminalLine {
   kind: 'cmd' | 'out';
   text: string;
@@ -16,6 +18,7 @@ interface Out {
   progress?: boolean;
 }
 
+/** One command in the script, with its output and timing options. */
 interface Step {
   cmd: string;
   out?: Out[];
@@ -25,8 +28,11 @@ interface Step {
   fast?: boolean;
   /** Clears the screen after typing the command (`clear`). */
   clear?: boolean;
+  /** Blows the terminal up once the output has played. */
+  crash?: boolean;
 }
 
+/** Shorthand for building an output line. */
 const o = (text: string, tone?: Tone, delay?: number): Out => ({ text, tone, delay });
 
 // A day in an Arch box. Output lines are kept under ~50 columns so they fit the tilted window.
@@ -174,6 +180,23 @@ const SCRIPT: Step[] = [
       o('→ Local:   http://localhost:4200/', 'link'),
     ],
   },
+  {
+    cmd: 'sudo rm -rf --no-preserve-root /',
+    pause: 1200,
+    crash: true,
+    out: [
+      o("removed '/usr/bin/git'", 'dim', 90),
+      o("removed '/usr/bin/node'", 'dim', 90),
+      o("removed '/usr/lib/libc.so.6'", 'dim', 90),
+      o("removed '/usr/bin/zsh'", 'dim', 90),
+      o("rm: cannot remove '/proc/1': busy", 'err', 160),
+      o('sudo: error while loading shared', 'err', 120),
+      o('libraries: libc.so.6: No such file', 'err', 200),
+      o('zsh: segmentation fault (core dumped)', 'err', 300),
+      o('Kernel panic - not syncing:', 'err', 100),
+      o('Attempted to kill init!', 'err', 400),
+    ],
+  },
 ];
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -184,7 +207,7 @@ const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve,
   standalone: true,
   template: `
     <div class="tilt" aria-hidden="true">
-      <div class="window">
+      <div class="window" [class.crashed]="crashed()">
         <div class="bar">
           <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
           <span class="title">christian&#64;arch:~</span>
@@ -300,6 +323,31 @@ const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve,
       overflow: hidden;
     }
 
+    // The final rm -rf /: the window shakes and glitches, then the screen dies
+    .window.crashed {
+      animation: shake 0.8s linear;
+    }
+
+    .window.crashed .body {
+      animation: blackout 2.4s ease-in forwards;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translate(0, 0); filter: none; }
+      10% { transform: translate(-6px, 3px) skewX(4deg); filter: hue-rotate(90deg) saturate(3); }
+      25% { transform: translate(5px, -4px) skewX(-5deg); filter: invert(1); }
+      40% { transform: translate(-4px, -2px); filter: hue-rotate(200deg); }
+      55% { transform: translate(6px, 4px) skewX(3deg); filter: invert(1) saturate(4); }
+      70% { transform: translate(-3px, 2px); filter: none; }
+      85% { transform: translate(2px, -1px) skewX(-2deg); filter: hue-rotate(40deg); }
+    }
+
+    @keyframes blackout {
+      0%, 20% { opacity: 1; }
+      60% { opacity: 0.5; }
+      100% { opacity: 0; }
+    }
+
     .line {
       flex-shrink: 0;
       white-space: pre-wrap;
@@ -333,20 +381,26 @@ const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve,
 })
 export class TerminalPanel implements OnInit, OnDestroy {
   readonly lines = signal<TerminalLine[]>([]);
+  /** True while the `rm -rf /` crash animation plays. */
+  readonly crashed = signal(false);
   private alive = true;
 
+  /** Starts the command loop. */
   ngOnInit(): void {
     void this.run();
   }
 
+  /** Stops the loop at its next checkpoint. */
   ngOnDestroy(): void {
     this.alive = false;
   }
 
+  /** Appends a line to the terminal. */
   private push(line: TerminalLine): void {
     this.lines.update((l) => [...l, line]);
   }
 
+  /** Types `cmd` into a new prompt line one character at a time. */
   private async type(cmd: string, fast = false): Promise<void> {
     this.push({ kind: 'cmd', text: '' });
     for (let i = 1; i <= cmd.length && this.alive; i++) {
@@ -365,6 +419,16 @@ export class TerminalPanel implements OnInit, OnDestroy {
     }
   }
 
+  /** Shakes the window, fades the screen to black, then waits a moment before the loop restarts. */
+  private async crash(): Promise<void> {
+    this.crashed.set(true);
+    await sleep(3000);
+    this.crashed.set(false);
+    this.lines.set([]);
+    await sleep(1200);
+  }
+
+  /** Plays the whole script in a loop, ending each pass with the crash. */
   private async run(): Promise<void> {
     await sleep(2400); // start once the panel has slid in, after the experience cards
     while (this.alive) {
@@ -387,10 +451,12 @@ export class TerminalPanel implements OnInit, OnDestroy {
             await sleep(out.delay ?? 200);
           }
         }
+        if (step.crash) {
+          await this.crash();
+          break;
+        }
         await sleep(900);
       }
-      this.push({ kind: 'cmd', text: '' }); // idle prompt with blinking cursor
-      await sleep(3800);
     }
   }
 }

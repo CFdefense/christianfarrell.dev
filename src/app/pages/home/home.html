@@ -14,7 +14,15 @@
         <div class="avatar-fallback" style="display:none">CF</div>
         <div class="avatar-overlay" aria-hidden="true">About me</div>
       </div>
-      
+
+      <!-- Hand-drawn arrow that swoops in from the top left, loops once and points at the avatar; the text follows its curve. Fades in and out via CSS only. -->
+      <div class="profile-hint" aria-hidden="true">
+        <svg viewBox="0 -16 262 136" fill="none">
+          <path id="hint-text-path" d="M 6 16 C 40 4, 70 30, 100 28 C 130 26, 150 40, 168 58" transform="translate(0,-12)" />
+          <text><textPath href="#hint-text-path" startOffset="6">learn more about me</textPath></text>
+          <path class="hint-arrow" d="M 6 16 C 40 4, 70 30, 100 28 C 130 26, 150 40, 168 58 C 182 74, 178 100, 156 98 C 134 96, 138 66, 168 66 C 190 66, 215 70, 250 74 M 231 62 L 251 74 L 230 86" />
+        </svg>
+      </div>
       </div>
 
       <div class="profile-intro-centered">

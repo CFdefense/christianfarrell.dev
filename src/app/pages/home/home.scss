@@ -53,6 +53,52 @@ $dark: #18181b;
   position: relative;
 }
 
+// "Learn more about me" arrow: invisible for 15s after load, fades in, stays for two minutes, fades out.
+// Sits left of the avatar, swooping in from the top left with its tip on the photo's left edge; hidden on narrow screens.
+.profile-hint {
+  position: absolute;
+  top: -18px;
+  right: calc(100% - 4px);
+  width: 12rem;
+  pointer-events: none;
+  opacity: 0;
+  animation: hint-life 124s ease-in-out 15s both;
+
+  svg {
+    display: block;
+    overflow: visible;
+    animation: hint-point 0.9s ease-in-out infinite alternate;
+  }
+
+  path:first-child {
+    stroke: none;
+  }
+
+  .hint-arrow {
+    stroke: $dark;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  text {
+    font-family: 'Caveat', cursive;
+    font-size: 21px;
+    font-weight: 600;
+    fill: #52525b;
+  }
+
+  @media (max-width: 1299px) {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    svg {
+      animation: none;
+    }
+  }
+}
+
 .avatar-wrapper-centered {
   width: 96px;
   height: 96px;
@@ -581,10 +627,21 @@ svg * {
   transform-box: fill-box;
 }
 
+@keyframes hint-life {
+  0% { opacity: 0; }
+  1.5% { opacity: 1; }
+  98.5% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes hint-point {
+  to { transform: translateX(5px); }
+}
+
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes slide-up { from { opacity: 0; transform: translateY(20px) scale(0.98); } }
 
-// ---- Page load animation sequence ----
+// Page load animation sequence
 // 1. avatar + name fade down  2. options bar fades up
 // 3. summary fades in line by line
 // (the experiences then pop in via the `.reveal` styles in styles.scss)
@@ -615,7 +672,7 @@ svg * {
 @keyframes fade-up { from { opacity: 0; transform: translateY(24px); } }
 @keyframes line-fade { from { opacity: 0; transform: translateY(8px); filter: blur(4px); } }
 
-// ---- Footer mascots (start when the footer scrolls into view) ----
+// Footer mascots (start when the footer scrolls into view)
 // The stage covers the footer; the mascots stand on its bottom edge (the bottom of the page).
 .footer-stage {
   position: absolute;

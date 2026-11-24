@@ -9,6 +9,7 @@ import { GraphPanel } from '../../shared/graph-panel';
 import { RevealDirective } from '../../shared/reveal.directive';
 import { TerminalPanel } from '../../shared/terminal-panel';
 
+/** Landing page: hero, experience and project cards, detail popups, contact form and footer mascots. */
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -23,29 +24,31 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   readonly summaryWords =
     'Backend engineer at IBM Storage Scale in New York, working on test automation, AI agents and enterprise storage.'.split(' ');
-  // Rendered line number of each word in the summary, used to fade the text in line by line
+  /** Rendered line number of each summary word, used to fade the text in line by line. */
   lineIndex = signal<number[]>([]);
-  // Footer mascots are mounted (so their GIFs start from frame 1) when the footer scrolls into view:
-  // the crab first, then the gopher once the crab has finished walking in.
+  /** Footer mascots mount (so their GIFs start from frame 1) when the footer scrolls into view: the crab first, then the gopher. */
   crabVisible = signal(false);
   gopherVisible = signal(false);
   private mascotObserver?: IntersectionObserver;
   private gopherTimer: any;
   private host = inject(ElementRef<HTMLElement>);
 
+  /** The project or experience shown in the detail popup, or null when it is closed. */
   activeItem = signal<Project | Experience | null>(null);
+  /** State of the contact form submission. */
   contactStatus = signal<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
   @ViewChild('detailDialog') dialogElement?: ElementRef<HTMLDialogElement>;
   @ViewChild('footerStage') footerStage?: ElementRef<HTMLElement>;
 
+  /** Measures the summary once web fonts load (so line breaks are final) and starts watching the footer. */
   ngAfterViewInit(): void {
-    // Wait for web fonts so line breaks are measured with the final font
     const fonts = typeof document !== 'undefined' ? document.fonts : undefined;
     (fonts ? fonts.ready : Promise.resolve()).then(() => this.measureSummaryLines());
     this.watchFooterStage();
   }
 
+  /** Starts the mascots when the footer scrolls into view, or immediately without IntersectionObserver. */
   private watchFooterStage(): void {
     const stage = this.footerStage?.nativeElement;
     if (!stage) return;
@@ -62,13 +65,14 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     this.mascotObserver.observe(stage);
   }
 
+  /** Shows the crab, then the gopher 1s later while the ~2.24s crab GIF is still walking in. */
   private startMascots(): void {
     this.mascotObserver?.disconnect();
     this.crabVisible.set(true);
-    // The crab GIF runs ~2.24s; the gopher pops up while it is still walking in
     this.gopherTimer = setTimeout(() => this.gopherVisible.set(true), 1000);
   }
 
+  /** Records which rendered line each summary word landed on. */
   private measureSummaryLines(): void {
     const words: HTMLElement[] = Array.from(this.host.nativeElement.querySelectorAll('.summary-paragraph .word'));
     let line = -1;
@@ -84,11 +88,11 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     );
   }
 
+  /** Opens the detail popup for `item`, or closes it when `item` is null. */
   setActiveItem(item: Project | Experience | null): void {
     if (this.activeItem() === item) return;
     this.activeItem.set(item);
     if (item) {
-      // Open native dialog modal asynchronously after template rendering
       setTimeout(() => {
         if (this.dialogElement && typeof this.dialogElement.nativeElement.showModal === 'function') {
           this.dialogElement.nativeElement.showModal();
@@ -101,7 +105,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  // Same Formspree endpoint and fields (name, email, message) as the previous portfolio's contact form
+  /** Posts the contact form (name, email, message) to Formspree and closes the dialog shortly after success. */
   async sendContact(event: Event, dialog: HTMLDialogElement): Promise<void> {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
@@ -124,18 +128,22 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  /** Type guard: experiences have a `role`, projects do not. */
   isExperience(item: any): item is Experience {
     return item && 'role' in item;
   }
 
+  /** Template helper that narrows the active item to an Experience. */
   asExperience(item: any): Experience {
     return item as Experience;
   }
 
+  /** Template helper that narrows the active item to a Project. */
   asProject(item: any): Project {
     return item as Project;
   }
 
+  /** Clears the pending gopher timer and the footer observer. */
   ngOnDestroy(): void {
     if (this.gopherTimer) clearTimeout(this.gopherTimer);
     this.mascotObserver?.disconnect();

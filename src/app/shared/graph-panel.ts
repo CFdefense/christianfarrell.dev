@@ -364,14 +364,17 @@ export class GraphPanel implements OnInit, OnDestroy {
   private alive = true;
   private lastAlgo = -1;
 
+  /** Starts the build, spin, traverse and reset loop. */
   ngOnInit(): void {
     void this.run();
   }
 
+  /** Stops the loop at its next checkpoint. */
   ngOnDestroy(): void {
     this.alive = false;
   }
 
+  /** Empties the graph before the next network is built. */
   private clear(): void {
     this.nodes.set([]);
     this.edges.set([]);
@@ -401,6 +404,7 @@ export class GraphPanel implements OnInit, OnDestroy {
     this.phase.set('traverse');
   }
 
+  /** Adds the network's nodes (and the edges to them) one at a time. */
   private async build(net: Network): Promise<void> {
     this.centre.set(net.centre);
     this.phase.set('build');
@@ -415,6 +419,7 @@ export class GraphPanel implements OnInit, OnDestroy {
     this.current.set(-1);
   }
 
+  /** Endless loop: build a network, spin for an algorithm, traverse, then implode. */
   private async run(): Promise<void> {
     await sleep(2800); // start once the panel has slid in, after the experience cards
     while (this.alive) {

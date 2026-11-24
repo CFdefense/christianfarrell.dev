@@ -1,15 +1,18 @@
+/** A person in the network, positioned in the SVG viewBox. */
 export interface GNode {
   id: number;
   x: number;
   y: number;
 }
 
+/** An undirected connection between nodes `a` and `b`; `key` is the order-independent id. */
 export interface GEdge {
   a: number;
   b: number;
   key: string;
 }
 
+/** A connected graph with its adjacency list and the centroid of its nodes. */
 export interface Network {
   nodes: GNode[];
   edges: GEdge[];
@@ -23,11 +26,13 @@ export interface Step {
   parent: number | null;
 }
 
+/** A named traversal that returns the visit order for a network from a start node. */
 export interface Algorithm {
   name: string;
   run: (net: Network, start: number) => Step[];
 }
 
+/** A point in the SVG viewBox. */
 type Pt = { x: number; y: number };
 
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
@@ -35,11 +40,10 @@ const pick = <T>(list: T[]): T => list[Math.floor(Math.random() * list.length)];
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 const dist = (p: Pt, q: Pt) => Math.hypot(p.x - q.x, p.y - q.y);
 
+/** Order-independent id for the edge between `a` and `b`. */
 export const keyOf = (a: number, b: number) => (a < b ? `${a}-${b}` : `${b}-${a}`);
 
-// ---------------------------------------------------------------------------------------------
-// Random networks. Points live in a 400 x 175 box (the SVG viewBox); a generator is chosen at random.
-// ---------------------------------------------------------------------------------------------
+// Random networks: points live in a 400 x 175 box (the SVG viewBox) and one generator is chosen at random.
 
 /** Jittered grid with a few gaps. */
 function gridPoints(): Pt[] {
@@ -99,6 +103,7 @@ function ringPoints(): Pt[] {
   return pts;
 }
 
+/** Point generators; `buildNetwork` picks one at random. */
 const GENERATORS = [gridPoints, scatterPoints, clusterPoints, ringPoints];
 
 /**
@@ -147,10 +152,9 @@ export function buildNetwork(): Network {
   return { nodes, edges, adj, centre };
 }
 
-// ---------------------------------------------------------------------------------------------
 // Traversal algorithms. Each returns the order nodes are visited in, with the edge used to reach them.
-// ---------------------------------------------------------------------------------------------
 
+/** Distance between two nodes of the network. */
 const w = (net: Network, a: number, b: number) => dist(net.nodes[a], net.nodes[b]);
 
 /** The node furthest from `from`, used as the goal for the heuristic searches. */
@@ -158,6 +162,7 @@ function farthest(net: Network, from: number): number {
   return net.nodes.reduce((best, n) => (w(net, from, n.id) > w(net, from, best) ? n.id : best), from);
 }
 
+/** A frontier entry for `bestFirst`. */
 interface Entry {
   node: number;
   parent: number | null;
@@ -186,6 +191,7 @@ function bestFirst(net: Network, start: number, score: (e: Entry, seq: number) =
   return out;
 }
 
+/** Classic recursive depth-first search. */
 function recursiveDfs(net: Network, start: number): Step[] {
   const seen = new Set<number>();
   const out: Step[] = [];
@@ -319,6 +325,7 @@ function pageRank(net: Network): Step[] {
   return sweep(net, (i) => -rank[i]);
 }
 
+/** Every traversal the graph panel can pick from. */
 export const ALGORITHMS: Algorithm[] = [
   { name: 'BFS', run: (n, s) => bestFirst(n, s, (_e, q) => q) },
   { name: 'DFS', run: (n, s) => bestFirst(n, s, (_e, q) => -q) },

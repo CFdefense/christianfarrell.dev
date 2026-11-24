@@ -18,16 +18,21 @@ import { AfterViewInit, Directive, ElementRef, OnDestroy, inject, input, signal 
   },
 })
 export class RevealDirective implements AfterViewInit, OnDestroy {
+  /** Seconds to wait after the element comes into view. */
   readonly revealDelay = input(0);
+  /** Extra seconds to wait only when the element is already on screen at page load. */
   readonly revealAfterLoad = input(0);
 
+  /** True once the reveal animation should play. */
   protected readonly revealed = signal(false);
+  /** CSS animation delay applied via `--reveal-delay`. */
   protected readonly delay = signal('0s');
 
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
   private observer?: IntersectionObserver;
   private firstCallback = true;
 
+  /** Observes the element and reveals it when it enters the viewport (immediately without IntersectionObserver). */
   ngAfterViewInit(): void {
     if (typeof IntersectionObserver === 'undefined') {
       this.reveal(0);
@@ -49,12 +54,14 @@ export class RevealDirective implements AfterViewInit, OnDestroy {
     this.observer.observe(this.el.nativeElement);
   }
 
+  /** Triggers the reveal after `delaySeconds` and stops observing. */
   private reveal(delaySeconds: number): void {
     this.delay.set(`${delaySeconds}s`);
     this.revealed.set(true);
     this.observer?.disconnect();
   }
 
+  /** Stops observing. */
   ngOnDestroy(): void {
     this.observer?.disconnect();
   }
